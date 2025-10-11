@@ -1,4 +1,4 @@
-- Preview Website: https://nightrunners02.github.io/Login_Simple2/
+- Preview Website: https://nightrunners02.github.io/Login_Simple-2/
 ---
 <details> 
   <summary>
