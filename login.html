@@ -25,7 +25,6 @@
   transition: all 0.5s ease;
   z-index: 1000;
 }
-
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
@@ -106,38 +105,58 @@ animate();
 // Login JS-only
 document.getElementById("login-form").addEventListener("submit",function(e){
   e.preventDefault();
-  const username=this.querySelector('input[type="text"]').value.trim();
-  const password=this.querySelector('input[type="password"]').value.trim();
-  const remember=document.getElementById("remember").checked;
+  const input = this.querySelector('input[type="text"]').value.trim();
+  const password = this.querySelector('input[type="password"]').value.trim();
+  const remember = document.getElementById("remember").checked;
+  const toast = document.getElementById("toastLogin");
 
-  if(username && password){
-    // Ambil daftar user yang sudah register
-    let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+  if(input && password){
+    // Ambil daftar user dari riwayatPassword
+    let users = JSON.parse(localStorage.getItem("riwayatPassword")) || [];
 
-    // Cek apakah user terdaftar
-    const userFound = users.find(u => u.username === username && u.password === password);
+    // Cek apakah user terdaftar (username atau email)
+    const userFound = users.find(u => 
+      (u.username === input || u.email === input) && u.password === password
+    );
 
-    const toast=document.getElementById("toastLogin");
     if(userFound){
       // Login berhasil
-      let history=JSON.parse(localStorage.getItem("passwordHistory"))||[];
-      history.push({username,password,timestamp:new Date().toLocaleString("id-ID")});
-      localStorage.setItem("passwordHistory",JSON.stringify(history));
-
-      if(remember) localStorage.setItem("rememberedUser",JSON.stringify({username,password}));
-      else localStorage.removeItem("rememberedUser");
-
       toast.textContent = "Login berhasil!";
       toast.classList.add("show");
-      setTimeout(()=>{ toast.classList.remove("show"); window.location.href="riwayat_password.html"; },1500);
+
+      // Update history login realtime
+      let history = JSON.parse(localStorage.getItem("passwordHistory")) || [];
+      history.push({
+        username: userFound.username,
+        email: userFound.email,
+        password: userFound.password,
+        timestamp: new Date().toLocaleString("id-ID")
+      });
+      localStorage.setItem("passwordHistory", JSON.stringify(history));
+
+      // Remember me
+      if(remember){
+        localStorage.setItem("rememberedUser", JSON.stringify({
+          username: userFound.username,
+          email: userFound.email,
+          password: userFound.password
+        }));
+      } else {
+        localStorage.removeItem("rememberedUser");
+      }
+
+      setTimeout(()=>{
+        toast.classList.remove("show");
+        window.location.href = "riwayat_password.html";
+      },1500);
+
     } else {
-      // User belum register
-      toast.textContent = "Username / Password belum terdaftar!";
+      toast.textContent = "Username / Email atau Password belum terdaftar!";
       toast.classList.add("show");
-      setTimeout(()=> toast.classList.remove("show"),2000);
+      setTimeout(()=> toast.classList.remove("show"), 2000);
     }
-  }else{
-    alert("Isi username dan password!");
+  } else {
+    alert("Isi username/email dan password!");
   }
 });
 </script>

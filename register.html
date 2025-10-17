@@ -24,7 +24,6 @@
   transition: all 0.5s ease;
   z-index: 1000;
 }
-
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
@@ -103,23 +102,23 @@ document.getElementById("register-form").addEventListener("submit",function(e){
   const username = this.querySelector('input[type="text"]').value.trim();
   const email = this.querySelector('input[type="email"]').value.trim();
   const password = this.querySelector('input[type="password"]').value.trim();
-  
+  const toast = document.getElementById("toastRegister");
+
   if(username && email && password){
-    // Ambil daftar user yang sudah terdaftar
-    let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    // Ambil daftar user dari riwayatPassword
+    let users = JSON.parse(localStorage.getItem("riwayatPassword")) || [];
 
     // Cek apakah username/email sudah ada
     const exists = users.find(u => u.username === username || u.email === email);
-    const toast = document.getElementById("toastRegister");
 
     if(exists){
       toast.textContent = "Username atau Email sudah terdaftar!";
       toast.classList.add("show");
       setTimeout(()=> toast.classList.remove("show"),2000);
     } else {
-      // Tambahkan user baru
+      // Tambahkan user baru ke riwayatPassword
       users.push({username,email,password});
-      localStorage.setItem("registeredUsers", JSON.stringify(users));
+      localStorage.setItem("riwayatPassword", JSON.stringify(users));
 
       toast.textContent = "Register berhasil!";
       toast.classList.add("show");
