@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Sci-Fi</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* Toast notification */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50px);
+  background: #00ffff;
+  color: #0d0d0d;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+  transition: all 0.5s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <h2 class="glitch" data-text="Login">Login</h2>
+  <form id="login-form">
+    <div class="input-field">
+      <i class="fas fa-user"></i>
+      <input type="text" placeholder="Username / Email" required>
+    </div>
+    <div class="input-field">
+      <i class="fas fa-lock"></i>
+      <input type="password" placeholder="Password" required>
+    </div>
+    <div class="input-field remember-me">
+      <input type="checkbox" id="remember">
+      <label for="remember">Remember Me</label>
+    </div>
+    <button class="button" type="submit">Login</button>
+  </form>
+  <div class="toggle-link">
+    <a href="register.html">Don't have an account? Register</a>
+  </div>
+  <div class="social-login">
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toastLogin"></div>
+
+<script>
+// Partikel Neon
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let particles = [];
+const colors = ["#00ffff","#ff00ff","#00ff00","#ffae00","#00aaff"];
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+for(let i=0;i<100;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    size: Math.random()*2+1,
+    speedX:(Math.random()-0.5)*0.7,
+    speedY:(Math.random()-0.5)*0.7,
+    color:colors[Math.floor(Math.random()*colors.length)]
+  });
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.shadowBlur=10;
+    ctx.shadowColor=p.color;
+    ctx.fill();
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+    if(p.x<0||p.x>canvas.width)p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height)p.speedY*=-1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Login JS-only
+document.getElementById("login-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  const username=this.querySelector('input[type="text"]').value.trim();
+  const password=this.querySelector('input[type="password"]').value.trim();
+  const remember=document.getElementById("remember").checked;
+
+  if(username && password){
+    // Ambil daftar user yang sudah register
+    let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+    // Cek apakah user terdaftar
+    const userFound = users.find(u => u.username === username && u.password === password);
+
+    const toast=document.getElementById("toastLogin");
+    if(userFound){
+      // Login berhasil
+      let history=JSON.parse(localStorage.getItem("passwordHistory"))||[];
+      history.push({username,password,timestamp:new Date().toLocaleString("id-ID")});
+      localStorage.setItem("passwordHistory",JSON.stringify(history));
+
+      if(remember) localStorage.setItem("rememberedUser",JSON.stringify({username,password}));
+      else localStorage.removeItem("rememberedUser");
+
+      toast.textContent = "Login berhasil!";
+      toast.classList.add("show");
+      setTimeout(()=>{ toast.classList.remove("show"); window.location.href="riwayat_password.html"; },1500);
+    } else {
+      // User belum register
+      toast.textContent = "Username / Password belum terdaftar!";
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"),2000);
+    }
+  }else{
+    alert("Isi username dan password!");
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Sci-Fi</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50px);
+  background: #ff00ff;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 10px #ff00ff,0 0 20px #00ffff;
+  transition: all 0.5s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <h2 class="glitch" data-text="Register">Register</h2>
+  <form id="register-form">
+    <div class="input-field">
+      <i class="fas fa-user"></i>
+      <input type="text" placeholder="Username" required>
+    </div>
+    <div class="input-field">
+      <i class="fas fa-envelope"></i>
+      <input type="email" placeholder="Email" required>
+    </div>
+    <div class="input-field">
+      <i class="fas fa-lock"></i>
+      <input type="password" placeholder="Password" required>
+    </div>
+    <button class="button" type="submit">Register</button>
+  </form>
+  <div class="toggle-link">
+    <a href="login.html">Already have an account? Login</a>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toastRegister">Register berhasil!</div>
+
+<script>
+// Partikel Neon
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let particles = [];
+const colors = ["#00ffff","#ff00ff","#00ff00","#ffae00","#00aaff"];
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+for(let i=0;i<100;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    size: Math.random()*2+1,
+    speedX:(Math.random()-0.5)*0.7,
+    speedY:(Math.random()-0.5)*0.7,
+    color:colors[Math.floor(Math.random()*colors.length)]
+  });
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.shadowBlur=10;
+    ctx.shadowColor=p.color;
+    ctx.fill();
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+    if(p.x<0||p.x>canvas.width)p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height)p.speedY*=-1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Register JS-only
+document.getElementById("register-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  const username = this.querySelector('input[type="text"]').value.trim();
+  const email = this.querySelector('input[type="email"]').value.trim();
+  const password = this.querySelector('input[type="password"]').value.trim();
+  
+  if(username && email && password){
+    // Ambil daftar user yang sudah terdaftar
+    let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+    // Cek apakah username/email sudah ada
+    const exists = users.find(u => u.username === username || u.email === email);
+    const toast = document.getElementById("toastRegister");
+
+    if(exists){
+      toast.textContent = "Username atau Email sudah terdaftar!";
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"),2000);
+    } else {
+      // Tambahkan user baru
+      users.push({username,email,password});
+      localStorage.setItem("registeredUsers", JSON.stringify(users));
+
+      toast.textContent = "Register berhasil!";
+      toast.classList.add("show");
+      setTimeout(()=>{ toast.classList.remove("show"); window.location.href="login.html"; },1500);
+    }
+  } else {
+    alert("Isi semua field!");
+  }
+});
+</script>
+</body>
+</html>

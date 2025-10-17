@@ -1,178 +1,405 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
+/* ======================
+   Global Reset & Body
+====================== */
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;	
-	font-family: Raleway, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', sans-serif;
 }
 
 body {
-	background: linear-gradient(90deg, #C7C5F4, #776BCC);		
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0d0d0d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: #fff;
 }
 
+/* ======================
+   Canvas Partikel Neon
+====================== */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: #0d0d0d;
+}
+
+/* ======================
+   Container Login / Register / Riwayat
+====================== */
 .container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  width: 380px;
+  max-width: 90%;
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 25px;
+  padding: 40px 30px;
+  box-shadow:
+    0 0 15px #00ffff,
+    0 0 30px #ff00ff,
+    0 0 40px #00ffff50 inset,
+    0 0 25px #ff00ff50 inset;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+  animation: fadeIn 1s ease-in-out;
 }
 
-.screen {		
-	background: linear-gradient(90deg, #5D54A4, #7C78B8);		
-	position: relative;	
-	height: 600px;
-	width: 360px;	
-	box-shadow: 0px 0px 24px #5C5696;
+/* ======================
+   Header / Glitch
+====================== */
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2em;
+  color: #00ffff;
+  text-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #ff00ff,
+    0 0 30px #00ffff80;
+  letter-spacing: 1px;
 }
 
-.screen__content {
-	z-index: 1;
-	position: relative;	
-	height: 100%;
+.glitch {
+  position: relative;
+  font-size: 2.2em;
+  color: #00ffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: glitch-animation 1.5s infinite;
 }
 
-.screen__background {		
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 0;
-	-webkit-clip-path: inset(0 0 0 0);
-	clip-path: inset(0 0 0 0);	
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: #ff00ff;
+  background: transparent;
+  overflow: hidden;
+  clip: rect(0, 9999px, 0, 0);
 }
 
-.screen__background__shape {
-	transform: rotate(45deg);
-	position: absolute;
+.glitch::after {
+  color: #00ff00;
+  animation: glitch-animation-after 1.5s infinite;
 }
 
-.screen__background__shape1 {
-	height: 520px;
-	width: 520px;
-	background: #FFF;	
-	top: -50px;
-	right: 120px;	
-	border-radius: 0 72px 0 0;
+@keyframes glitch-animation {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
 }
 
-.screen__background__shape2 {
-	height: 220px;
-	width: 220px;
-	background: #6C63AC;	
-	top: -172px;
-	right: 0;	
-	border-radius: 32px;
+@keyframes glitch-animation-after {
+  0% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  25% { clip: rect(0, 9999px, 15px, 0); transform: translate(2px,-2px); }
+  50% { clip: rect(5px, 9999px, 25px, 0); transform: translate(-2px,2px); }
+  75% { clip: rect(10px, 9999px, 35px, 0); transform: translate(2px,0); }
+  100% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
 }
 
-.screen__background__shape3 {
-	height: 540px;
-	width: 190px;
-	background: linear-gradient(270deg, #5D54A4, #6A679E);
-	top: -24px;
-	right: 0;	
-	border-radius: 32px;
+/* ======================
+   Form / Input Fields
+====================== */
+form {
+  display: flex;
+  flex-direction: column;
 }
 
-.screen__background__shape4 {
-	height: 400px;
-	width: 200px;
-	background: #7E7BB9;	
-	top: 420px;
-	right: 50px;	
-	border-radius: 60px;
+.input-field {
+  position: relative;
+  margin-bottom: 25px;
 }
 
-.login {
-	width: 320px;
-	padding: 30px;
-	padding-top: 156px;
+.input-field i {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #ff00ff;
+  transition: 0.3s;
 }
 
-.login__field {
-	padding: 20px 0px;	
-	position: relative;	
+.input-field input {
+  width: 100%;
+  padding: 14px 14px 14px 40px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+  box-shadow:
+    inset 0 0 5px #00ffff,
+    inset 0 0 15px #ff00ff50;
+  transition: 0.3s;
 }
 
-.login__icon {
-	position: absolute;
-	top: 30px;
-	color: #7875B5;
+.input-field input:focus {
+  outline: none;
+  background: rgba(255,255,255,0.15);
+  box-shadow:
+    0 0 15px #00ffff,
+    0 0 25px #ff00ff,
+    inset 0 0 10px #00ffff,
+    inset 0 0 20px #ff00ff;
 }
 
-.login__input {
-	border: none;
-	border-bottom: 2px solid #D1D1D4;
-	background: none;
-	padding: 10px;
-	padding-left: 24px;
-	font-weight: 700;
-	width: 75%;
-	transition: .2s;
+/* ======================
+   Remember Me Checkbox Neon (Compact)
+====================== */
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: #00ffff;
+  cursor: pointer;
 }
 
-.login__input:active,
-.login__input:focus,
-.login__input:hover {
-	outline: none;
-	border-bottom-color: #6A679E;
+.remember-me input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00ffff;
+  border-radius: 3px;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 5px;
+  box-shadow: 0 0 6px #00ffff, 0 0 12px #ff00ff inset;
+  background-color: transparent;
 }
 
-.login__submit {
-	background: #fff;
-	font-size: 14px;
-	margin-top: 30px;
-	padding: 16px 20px;
-	border-radius: 26px;
-	border: 1px solid #D4D3E8;
-	text-transform: uppercase;
-	font-weight: 700;
-	display: flex;
-	align-items: center;
-	width: 100%;
-	color: #4C489D;
-	box-shadow: 0px 2px 2px #5C5696;
-	cursor: pointer;
-	transition: .2s;
+.remember-me input[type="checkbox"]:checked {
+  background-color: #00ffff;
+  border-color: #ff00ff;
+  box-shadow: 0 0 10px #00ffff, 0 0 15px #ff00ff inset;
 }
 
-.login__submit:active,
-.login__submit:focus,
-.login__submit:hover {
-	border-color: #6A679E;
-	outline: none;
+.remember-me input[type="checkbox"]:checked::after {
+  content: '✔';
+  position: absolute;
+  top: -1px;
+  left: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0d0d0d;
 }
 
-.button__icon {
-	font-size: 24px;
-	margin-left: auto;
-	color: #7875B5;
+.remember-me:hover input[type="checkbox"] {
+  box-shadow: 0 0 12px #00ffff, 0 0 20px #ff00ff inset;
 }
 
-.social-login {	
-	position: absolute;
-	height: 140px;
-	width: 160px;
-	text-align: center;
-	bottom: 0px;
-	right: 0px;
-	color: #fff;
+.remember-me label {
+  cursor: pointer;
+  text-shadow: 0 0 6px #00ffff, 0 0 12px #ff00ff;
+  transition: all 0.3s ease;
 }
 
-.social-icons {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+.remember-me label:hover {
+  color: #ff00ff;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
 }
 
-.social-login__icon {
-	padding: 20px 10px;
-	color: #fff;
-	text-decoration: none;	
-	text-shadow: 0px 0px 8px #7875B5;
+
+/* ======================
+   Button
+====================== */
+.button {
+  background: #00ffff;
+  color: #0d0d0d;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1em;
+  box-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #ff00ff,
+    0 0 25px #00ffff50 inset;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
-.social-login__icon:hover {
-	transform: scale(1.5);	
+.button::after {
+  content: "";
+  position: absolute;
+  top:0;
+  left:-100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-25deg);
+  transition: 0.5s;
+}
+
+.button:hover::after {
+  left: 200%;
+}
+
+.button:hover {
+  background: #ff00ff;
+  color: #fff;
+  box-shadow:
+    0 0 20px #00ffff,
+    0 0 40px #ff00ff,
+    0 0 50px #00ffff80 inset,
+    0 0 30px #ff00ff80 inset;
+}
+
+/* ======================
+   Toggle Link
+====================== */
+.toggle-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.toggle-link a {
+  color: #00ffff;
+  text-decoration: none;
+  text-shadow: 0 0 5px #00ffff;
+  transition: 0.3s;
+}
+
+.toggle-link a:hover {
+  color: #ff00ff;
+  text-shadow: 0 0 10px #ff00ff;
+}
+
+/* ======================
+   Social Login Icons
+====================== */
+.social-login {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.social-login a {
+  color: #fff;
+  font-size: 22px;
+  margin: 0 10px;
+  transition: 0.3s;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.social-login a:hover {
+  transform: scale(1.4);
+  text-shadow: 0 0 15px #ff00ff;
+}
+
+/* ======================
+   Riwayat Password Table
+====================== */
+#historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95em;
+  box-shadow: 0 0 15px #00ffff, 0 0 30px #ff00ff inset;
+}
+
+#historyTable th, #historyTable td {
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid #00ffff;
+}
+
+#historyTable th {
+  background: #111;
+}
+
+.action-btn {
+  cursor: pointer;
+  font-weight: bold;
+  color: #ff00ff;
+  text-shadow: 0 0 5px #ff00ff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.action-btn:hover {
+  background: #00ffff;
+  color: #0d0d0d;
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+}
+
+/* ======================
+   Notifications
+====================== */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #00ffff;
+  color: #0d0d0d;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: 0.5s;
+  z-index: 999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ======================
+   Animations
+====================== */
+@keyframes fadeIn {
+  0% {opacity:0; transform: translateY(-20px);}
+  100% {opacity:1; transform: translateY(0);}
+}
+
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 480px) {
+  .container { padding: 30px 20px; width: 90%; }
+  h2 { font-size: 1.8em; margin-bottom: 25px; }
+  .input-field input { font-size: 0.95em; padding: 12px 12px 12px 35px; }
+  .button { font-size: 0.95em; padding: 12px; }
+  .social-login a { font-size: 20px; margin: 0 8px; }
+  #historyTable th, #historyTable td { padding: 8px 5px; font-size: 0.85em; }
+}
+
+@media (min-width: 768px) {
+  .container { width: 400px; padding: 45px 35px; }
+  h2 { font-size: 2.2em; }
+  .input-field input { font-size: 1.05em; }
+  .button { font-size: 1.05em; padding: 14px; }
+  #historyTable th, #historyTable td { padding: 10px 8px; font-size: 0.95em; }
 }
